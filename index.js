@@ -1,13 +1,8 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client({disableEveryone: true});
 const botconfig = require("./botconfig.json");
-const tokenfile = require("./token.json");
+const tokenfile = process.env.token
 const fs = require('fs');
-const moment = require('moment');
-var date = new Date();
-var jour = String(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear())
-
-//Whitelist
 
 // Storage
 const userData = JSON.parse(fs.readFileSync('Storage/userData.json', 'utf8'));
@@ -17,15 +12,15 @@ bot.on('ready', function () {
   bot.user.setActivity(`${bot.users.size} utilisateurs | ${bot.guilds.size} serveurs`, {type: "WATCHING"});
 })
 
-bot.login(tokenfile.token);
+bot.login(tokenfile);
 
 
-bot.on('guildCreate', (guild) => {
-  const channel = bot.guilds.get('451101776859627530').channels.get(`451119456043925533`).send('**Nouveau serveur:** '+guild.name+', **Propriétaire: **'+guild.owner.user.username+', **Nombre de membres: **'+guild.memberCount);
-})
-bot.on('guildDelete', (guild) => {
-  const channel = bot.guilds.get('451101776859627530').channels.get(`451119456043925533`).send('**Ancien serveur:** '+guild.name+', **Propriétaire: **'+guild.owner.user.username+', **Nombre de membres: **'+guild.memberCount);
-})
+//bot.on('guildCreate', (guild) => {
+ // const channel = bot.guilds.get('451101776859627530').channels.get(`451119456043925533`).send('**Nouveau serveur:** '+guild.name+', **Propriétaire: **'+guild.owner.user.username+', **Nombre de membres: **'+guild.memberCount);
+//})
+//bot.on('guildDelete', (guild) => {
+ // const channel = bot.guilds.get('451101776859627530').channels.get(`451119456043925533`).send('**Ancien serveur:** '+guild.name+', **Propriétaire: **'+guild.owner.user.username+', **Nombre de membres: **'+guild.memberCount);
+//})
 
 bot.on('message', message => {
   if(message.author.bot) return;
@@ -66,7 +61,6 @@ bot.on('message', message => {
       bot.user.setActivity('maintenance en cours...', {type: "PLAYING"});
       bot.user.setStatus('dnd')
       message.reply("Maintenance Activé !")
-      console.log(`commande "maintenance" demandé par ${message.author} avec l'ID depuis le serveur ${message.guild.name}`)
     }else{
       message.reply("Tu n'es pas mon **créateur**.")
     }
@@ -136,19 +130,6 @@ bot.on('message', message => {
       message.reply("Tu n'es pas mon **créateur**.")
     }
   }
-  if(cmd === `${prefix}support`){
-
-    let sicon = message.guild.iconURL;
-    let bicon = bot.user.displayAvatarURL;
-    let supportEmbed = new Discord.RichEmbed()
-    .setTitle("_Serveur Support_")
-    .setColor("#15f153")
-    .setThumbnail(bicon)
-    .addField("Vous souhaites rejoindre le serveur support ?", "https://discord.gg/mQmKFn4")
-    .setFooter(`${message.guild.name}`, sicon)
-
-    message.channel.send(`<@${sender.id}>`, supportEmbed)
-  }
 //Page d'aide
   if(cmd === `${prefix}aide` || cmd === `${prefix}help`){
 
@@ -161,7 +142,7 @@ bot.on('message', message => {
     .setDescription("Liste des commandes disponible", "Théo est un bot Français crée par <@205752580251451392>.")
     .addBlankField()
     .addField("Pages d'aides", "``howner``,``help``")
-    .addField(":gear: Utiles", "``binfo``,``sinfo``,``membercount``,``servers``,``support``")
+    .addField(":gear: Utiles", "``binfo``,``sinfo``,``membercount``,``servers``")
     .setFooter(`${message.guild.name}`, sicon)
 
     message.channel.send(`<@${sender.id}>`, helpembed)
@@ -197,37 +178,5 @@ bot.on('message', message => {
       message.channel.send(`<@${sender.id}>`, profileembed)
     }
   }
-//Argent
-    if(!userData[sender.id]) userData[sender.id] = {}
-    if(!userData[sender.id].gloires) userData[sender.id].gloires = 100;
-  
-  if(cmd === `${prefix}money` || cmd === `${prefix}balance`){
-    let moneyembed = new Discord.RichEmbed()
-    .setTitle("__Banque__")
-    .setColor("#15f153")
-    .addField("Nom du compte", message.author.username)
-    .addField("Gloires sur le compte", userData[sender.id].gloires)
 
-    message.channel.send(`<@${sender.id}>`, moneyembed)
-  }
-    
-//Pour post
-fs.writeFile('Storage/userData.json', JSON.stringify(userData), (err) => {
-  if (err) console.error(err);
-
-
-//Owner
-const setgame = require("./commands/Owner/setgame.js")
-const setstatus = require("./commands/Owner/setstatus.js")
-const setuser = require("./commands/Owner/setuser.js")
-
-    setgame(message,cmd,Discord,prefix,bot,args,sender)
-    setstatus(message,cmd,Discord,prefix,bot,args,sender)
-    setuser(message,cmd,Discord,prefix,bot,args,sender)
-
-//Ping
-const ping = require("./commands/utiles/ping.js")
-
-    ping(message,cmd,Discord,prefix,bot)
-
-})})
+})
