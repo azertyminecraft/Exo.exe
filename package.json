@@ -1,0 +1,21 @@
+{
+  "name": "theo-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "discord-eco": "0.0.10",
+    "discord.js": "^11.3.0",
+    "fs": "file:node_modules/fs",
+    "lowdb": "^1.0.0",
+    "moment": "^2.22.0",
+    "ms": "file:node_modules/ms",
+    "quick.log": "^1.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Spikyz",
+  "license": "ISC"
+}
