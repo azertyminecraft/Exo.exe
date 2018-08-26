@@ -4,8 +4,6 @@ const botconfig = require("./botconfig.json");
 const tokenfile = process.env.token
 const fs = require('fs');
 
-// Storage
-const userData = JSON.parse(fs.readFileSync('Storage/userData.json', 'utf8'));
 
 bot.on('ready', function () {
   console.log(`Je suis connecté sur ${bot.guilds.size} serveurs avec ${bot.users.size} utilisateurs !`)
